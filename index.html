@@ -31,16 +31,31 @@
             --card-inner: rgba(0, 0, 0, 0.02);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; 
-            -webkit-user-select: none; /* Für Safari/Chrome */
-            -moz-user-select: none;    /* Für Firefox */
-            -ms-user-select: none;     /* Für Internet Explorer */
+        /* --- GLOBAL SETTINGS --- */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-user-select: none; /* Safari/Chrome */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE */
             user-select: none;         /* Standard */
-          }
+        }
+
+        /* Erlaubt das Markieren von wichtigen Infos (IP & Impressum) */
+        .ip-badge, #impressum .info-card p, #impressum a {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
         body {
-            background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif;
             background-image: radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 40%);
-            background-attachment: fixed; min-height: 100vh; overflow-x: hidden;
+            background-attachment: fixed; 
+            min-height: 100vh; 
+            overflow-x: hidden;
             transition: background 0.5s ease, color 0.5s ease;
         }
 
