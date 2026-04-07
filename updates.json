@@ -1,0 +1,20 @@
+[
+  {
+    "datum": "10.04.2026",
+    "titel": "Früheres Update",
+    "kategorie": "INFO",
+    "text": "Dieses Update war eigentlich früher..."
+  },
+  {
+    "datum": "17.04.2026",
+    "titel": "Neustes Core-Update",
+    "kategorie": "SYSTEM",
+    "text": "Das hier wird automatisch nach oben sortiert, egal wo es in der Datei steht."
+  },
+  {
+    "datum": "20.04.2026",
+    "titel": "ältestes update",
+    "kategorie": "DEVELOPER",
+    "text": "Fast fertig!"
+  }
+]

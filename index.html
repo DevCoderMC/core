@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MC CORE | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-blur: blur(30px);
+            --accent: #ff8c00;
+            --accent-glow: rgba(255, 140, 0, 0.25);
+            --text: #ffffff;
+            --subtext: #b0b0b0;
+            --danger: #ff4444;
+            --nav-bg: rgba(8, 8, 8, 0.85);
+            --card-inner: rgba(255, 255, 255, 0.04);
+        }
+
+        body.light-mode {
+            --bg: #f5f5f7;
+            --glass: rgba(0, 0, 0, 0.03);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --text: #1d1d1f;
+            --subtext: #6e6e73;
+            --nav-bg: rgba(255, 255, 255, 0.8);
+            --card-inner: rgba(0, 0, 0, 0.02);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 40%);
+            background-attachment: fixed; height: 100vh; overflow: hidden;
+            -webkit-user-select: none; user-select: none;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed; top: 25px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 1100px;
+            background: var(--nav-bg); backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 28px; z-index: 1000;
+        }
+
+        .brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .nav-logo { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--glass-border); }
+
+        .nav-controls { display: flex; align-items: center; gap: 15px; }
+
+        .mode-toggle, .dropbtn {
+            background: var(--card-inner); border: 1px solid var(--glass-border);
+            color: var(--text); padding: 10px 18px; border-radius: 14px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+
+        .dropbtn:hover { border-color: var(--accent); background: rgba(255, 255, 255, 0.08); }
+
+        .dropdown { position: relative; }
+        .dropdown-content {
+            visibility: hidden; opacity: 0; position: absolute; top: 60px; right: 0;
+            background: var(--nav-bg); backdrop-filter: var(--glass-blur);
+            min-width: 220px; border-radius: 22px; border: 1px solid var(--glass-border);
+            padding: 10px; transform: translateY(10px); 
+            transition: visibility 0s 0.4s, opacity 0.4s ease, transform 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .dropdown-content::before {
+            content: ""; position: absolute; top: -6px; right: 25px;
+            width: 12px; height: 12px; background: var(--nav-bg);
+            border-left: 1px solid var(--glass-border); border-top: 1px solid var(--glass-border);
+            transform: rotate(45deg);
+        }
+
+        .dropdown:hover .dropdown-content { 
+            visibility: visible; opacity: 1; transform: translateY(0); 
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .dropdown-content a { color: var(--subtext); padding: 12px 18px; text-decoration: none; display: block; border-radius: 14px; cursor: pointer; font-size: 0.95rem; }
+        .dropdown-content a:hover { background: var(--card-inner); color: var(--accent); transform: translateX(5px); }
+
+        .ip-badge { background: var(--text); color: var(--bg); padding: 10px 20px; border-radius: 14px; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        .ip-badge:hover { transform: scale(1.05); }
+
+        /* --- PAGES --- */
+        .page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100vh;
+            padding: 140px 20px 80px; display: none;
+            flex-direction: column; align-items: center; opacity: 0; transition: 0.5s ease;
+            overflow: hidden;
+        }
+        .page.active { display: flex; opacity: 1; }
+        
+        #news, #team, #rules, #beweise, #gear, #times, #impressum { overflow-y: auto; }
+
+        .content-card {
+            background: var(--glass); backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: 40px;
+            padding: 40px; max-width: 1000px; width: 100%; margin-bottom: 30px;
+        }
+
+        h1 { font-size: 4.5rem; font-weight: 900; text-align: center; margin-bottom: 20px; }
+        h1 span { color: var(--accent); }
+        h2 { font-size: 2rem; margin-bottom: 25px; border-left: 5px solid var(--accent); padding-left: 20px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; }
+        .info-card { background: var(--card-inner); border: 1px solid var(--glass-border); padding: 25px; border-radius: 25px; }
+        .info-card h3 { color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; }
+        
+        .news-entry { background: var(--card-inner); border: 1px solid var(--glass-border); padding: 25px; border-radius: 25px; margin-bottom: 15px; }
+
+        footer {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            color: var(--subtext); font-size: 0.85rem; text-align: center; width: 100%;
+            z-index: 500; opacity: 0.7;
+        }
+        footer a { color: var(--subtext); text-decoration: underline; cursor: pointer; }
+
+        #copy-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 2000;
+        }
+        .checkmark-circle {
+            width: 100px; height: 100px; border-radius: 50%; background: var(--accent);
+            display: flex; justify-content: center; align-items: center;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .checkmark-circle svg { width: 60px; height: 60px; fill: black; }
+        
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+        .btn-discord { text-decoration: none; background: #5865F2; color: white; padding: 18px 40px; border-radius: 20px; font-weight: 800; transition: 0.3s; }
+        .btn-discord:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(88, 101, 242, 0.3); }
+        ul { list-style: none; color: var(--subtext); font-size: 0.95rem; line-height: 1.6; }
+        li::before { content: "• "; color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div id="copy-overlay">
+    <div class="checkmark-circle">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    </div>
+</div>
+
+<nav>
+    <div class="brand" onclick="showPage('home')">
+        <img src="logo.png" class="nav-logo" alt="Logo">
+        <span style="font-weight:900; letter-spacing: -1px;">MC CORE</span>
+    </div>
+    <div class="nav-controls">
+        <button class="mode-toggle" onclick="toggleMode()">🌓</button>
+        <div class="dropdown">
+            <button class="dropbtn">Navigation <span style="font-size: 0.8rem; opacity: 0.6;">▼</span></button>
+            <div class="dropdown-content">
+                <a onclick="showPage('home')">🏠 Start</a>
+                <a onclick="showPage('news')">📰 News</a>
+                <a onclick="showPage('rules')">⚖️ Regeln</a>
+                <a onclick="showPage('beweise')">📽️ Beweise</a>
+                <a onclick="showPage('gear')">⚔️ Gear</a>
+                <a onclick="showPage('times')">⏰ Zeiten</a>
+                <a onclick="showPage('team')">👥 Team</a>
+                <a onclick="showPage('impressum')">📄 Impressum</a>
+            </div>
+        </div>
+        <div class="ip-badge" onclick="copyIP()">core.endstone.top</div>
+    </div>
+</nav>
+
+<section id="home" class="page active">
+    <img src="logo.png" style="width:180px; border-radius:50%; margin-bottom:30px; box-shadow: 0 0 50px var(--accent-glow);">
+    <h1>MC <span>CORE</span></h1>
+    <p style="max-width:650px; text-align:center; color:var(--subtext); font-size: 1.1rem; margin-bottom: 30px;">
+        Reines PvP-Projekt. Hardcore. Minecraft Core war sehr anspruchsvoll, aber umso mehr freuen wir uns darauf.
+    </p>
+    <a href="https://discord.gg/My4NBJ7y" target="_blank" class="btn-discord">Discord Server</a>
+</section>
+
+<section id="news" class="page">
+    <div class="content-card">
+        <h2>Server Updates</h2>
+        <div id="news-list">Lade Protokoll...</div>
+    </div>
+</section>
+
+<section id="rules" class="page">
+    <div class="content-card">
+        <h2>Projekt-Regeln</h2>
+        <div class="grid">
+            <div class="info-card"><h3>👥 Teams</h3><p>2er Teams. Werden per Los am Tag des Starts bestimmt. Wechsel verboten!</p></div>
+            <div class="info-card"><h3>⚔️ PvP-Pflicht</h3><p>Andere Teams MÜSSEN angegriffen werden. PvP ist Pflicht.</p></div>
+            <div class="info-card"><h3>💀 Tod = Ende</h3><p>Nur 1 Leben. Egal wodurch – wer stirbt, ist raus. Tod ist Tod.</p></div>
+            <div class="info-card"><h3>🚫 No-Gos</h3><p>Cart-PvP, Bow-Camping, Minecart-Traps & Railguns verboten.</p></div>
+        </div>
+        <div class="info-card" style="margin-top:25px; border-color:var(--danger);">
+            <h3 style="color:var(--danger)">Combat Log</h3>
+            <p>Wer im Kampf ausloggt (egal ob Absicht oder Disconnect), ist sofort raus.</p>
+        </div>
+    </div>
+</section>
+
+<section id="beweise" class="page">
+    <div class="content-card">
+        <h2>Beweispflicht</h2>
+        <div class="grid">
+            <div class="info-card"><h3>📽️ Videobeweis</h3><p>Wiederbelebung bei Bugs NUR mit klarem Video. Ohne Beweis bleibt der Tod bestehen.</p></div>
+            <div class="info-card"><h3>🚩 Regelverstöße</h3><p>Meldungen anderer Spieler werden nur mit Beweisen (Clip/Screenshot) bearbeitet.</p></div>
+        </div>
+        <div class="info-card" style="margin-top:25px;">
+            <h3 style="color:var(--accent);">Empfohlene Tools</h3>
+            <ul>
+                <li>Medal (Einfaches Clipping)</li>
+                <li>OBS (Ganze Aufnahmen)</li>
+                <li>NVIDIA ShadowPlay</li>
+                <li>Replay Mod</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="gear" class="page">
+    <div class="content-card">
+        <h2>Gear & Items</h2>
+        <div class="grid">
+            <div class="info-card"><h3>❌ Verboten</h3><p>OP-Äpfel, Totems, Tridents und Mace existieren nicht.</p></div>
+            <div class="info-card"><h3>⛔ No Nether</h3><p>Nether deaktiviert. Kein Netherite, keine Blaze Rods, keine Potions.</p></div>
+            <div class="info-card"><h3>✨ Limits</h3><p>Kein Schutz IV, Schärfe V oder Mending. Keine Villager vorhanden.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="times" class="page">
+    <div class="content-card">
+        <h2>Spielzeiten</h2>
+        <div class="grid">
+            <div class="info-card"><h3>📅 Mo - Fr</h3><p>20:00 - 21:00 Uhr. Nach 3 Tagen Inaktivität -> Ban.</p></div>
+            <div class="info-card"><h3>Weekend</h3><p>Sa & So von 15:00 - 19:00 Uhr offen.</p></div>
+            <div class="info-card"><h3>🏙️ Samstag</h3><p>16:00 - 18:00 PvP-Free Zone zum Bauen. Flucht dorthin im Kampf = Ban.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="team" class="page">
+    <div class="content-card">
+        <h2>Serverteam</h2>
+        <div class="grid" id="team-container"></div>
+    </div>
+</section>
+
+<section id="impressum" class="page">
+    <div class="content-card">
+        <h2>Impressum / Kontakt</h2>
+        <div class="info-card">
+            <h3>Angaben gemäß § 5 TMG</h3>
+            <p style="color:var(--subtext); line-height: 1.6;">
+                MC CORE Netzwerk<br>
+                Vertreten durch: DevCoder<br><br>
+                <strong>Kontakt:</strong><br>
+                E-Mail: <a href="mailto:mc.core.netzwerk@gmail.com" style="color:var(--accent); text-decoration:none;">mc.core.netzwerk@gmail.com</a><br><br>
+                <strong>Haftungsausschluss:</strong><br>
+                Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links.
+            </p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    Made by <b>DevCoder</b> &bull; &copy; 2026 MC CORE Project &bull; <a onclick="showPage('impressum')">Impressum</a>
+</footer>
+
+<script>
+    function toggleMode() { document.body.classList.toggle('light-mode'); }
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+        const target = document.getElementById(id);
+        if(target) {
+            target.style.display = 'flex';
+            setTimeout(() => target.classList.add('active'), 50);
+        }
+    }
+
+    function copyIP() {
+        navigator.clipboard.writeText("core.endstone.top");
+        const overlay = document.getElementById('copy-overlay');
+        overlay.style.display = 'flex';
+        setTimeout(() => { overlay.style.display = 'none'; }, 800);
+    }
+
+    async function loadNews() {
+        try {
+            const res = await fetch('updates.json');
+            let data = await res.json();
+            const container = document.getElementById('news-list');
+            container.innerHTML = '';
+            data.forEach((u) => {
+                const entry = document.createElement('div');
+                entry.className = `news-entry`;
+                entry.innerHTML = `<span style="font-size:0.8rem; color:var(--accent)">${u.datum}</span><div style="font-weight:900; margin:5px 0;">${u.titel}</div><p style="color:var(--subtext); font-size:0.95rem;">${u.text}</p>`;
+                container.appendChild(entry);
+            });
+        } catch (e) { document.getElementById('news-list').innerHTML = "Keine News verfügbar."; }
+    }
+
+    async function loadTeam() {
+        try {
+            const res = await fetch('team.json');
+            const data = await res.json();
+            const container = document.getElementById('team-container');
+            for (const [role, members] of Object.entries(data)) {
+                const card = document.createElement('div');
+                card.className = 'info-card';
+                card.innerHTML = `<h3 style="font-size:0.7rem; text-transform:uppercase;">${role}</h3>${members.map(m => `<div style="font-weight:600;">${m}</div>`).join('')}`;
+                container.appendChild(card);
+            }
+        } catch (e) {}
+    }
+
+    loadNews(); loadTeam();
+</script>
+</body>
+</html>
