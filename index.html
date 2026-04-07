@@ -38,7 +38,7 @@
             transition: background 0.5s ease, color 0.5s ease;
         }
 
-        /* --- NAVIGATION (FIXED FÜR MOBILE) --- */
+        /* --- NAVIGATION --- */
         nav {
             position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
             width: 95%; max-width: 1100px;
@@ -46,13 +46,12 @@
             border: 1px solid var(--glass-border); border-radius: 20px;
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 20px; z-index: 1000;
-            flex-wrap: wrap; gap: 10px;
         }
 
         .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .nav-logo { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--glass-border); object-fit: cover; }
 
-        .nav-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .nav-controls { display: flex; align-items: center; gap: 10px; }
 
         .mode-toggle, .dropbtn {
             background: var(--card-inner); border: 1px solid var(--glass-border);
@@ -83,7 +82,7 @@
         /* --- PAGES --- */
         .page {
             width: 100%; min-height: 100vh;
-            padding: 140px 20px 80px; display: none;
+            padding: 120px 20px 80px; display: none;
             flex-direction: column; align-items: center; opacity: 0; transition: 0.5s ease;
         }
         .page.active { display: flex; opacity: 1; }
@@ -100,23 +99,20 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; width: 100%; }
         .info-card { background: var(--card-inner); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; }
-        .info-card h3 { color: var(--accent); margin-bottom: 8px; font-size: 1rem; }
         
-        footer {
-            padding: 40px 20px; color: var(--subtext); font-size: 0.8rem; text-align: center; width: 100%;
-        }
+        footer { padding: 40px 20px; color: var(--subtext); font-size: 0.8rem; text-align: center; width: 100%; }
 
-        /* --- MOBILE OPTIMIERUNG --- */
+        /* --- MOBILE SPECIALS --- */
+        .mobile-ip-btn { display: none; margin-top: 15px; background: var(--text); color: var(--bg); padding: 14px 28px; border-radius: 16px; font-weight: 900; cursor: pointer; text-align: center; width: 100%; max-width: 280px; }
+
         @media (max-width: 768px) {
-            nav { justify-content: center; padding: 12px; }
-            .brand { width: 100%; justify-content: center; }
-            .nav-controls { width: 100%; justify-content: center; }
-            .page { padding-top: 180px; }
-            h1 { font-size: 2.2rem; }
-            .content-card { padding: 20px; }
+            .nav-controls .ip-badge { display: none; } /* Oben aus Nav entfernen */
+            .mobile-ip-btn { display: block; } /* Unter Discord anzeigen */
+            h1 { font-size: 2.5rem; }
+            .page { padding-top: 100px; }
         }
 
-        /* --- CHECKMARK ANIMATION --- */
+        /* --- OVERLAY --- */
         #copy-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
@@ -130,8 +126,7 @@
         .checkmark-circle svg { width: 45px; height: 45px; fill: black; }
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
-        .btn-discord { text-decoration: none; background: #5865F2; color: white; padding: 16px 32px; border-radius: 18px; font-weight: 800; transition: 0.3s; margin-top: 10px; }
-        .btn-discord:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(88,101,242,0.3); }
+        .btn-discord { text-decoration: none; background: #5865F2; color: white; padding: 16px 32px; border-radius: 18px; font-weight: 800; transition: 0.3s; display: inline-block; text-align: center; width: 100%; max-width: 280px; }
     </style>
 </head>
 <body>
@@ -155,60 +150,39 @@
                 <a onclick="showPage('home')">🏠 Start</a>
                 <a onclick="showPage('news')">📰 News</a>
                 <a onclick="showPage('rules')">⚖️ Regeln</a>
-                <a onclick="showPage('gear')">⚔️ Gear</a>
-                <a onclick="showPage('times')">⏰ Zeiten</a>
                 <a onclick="showPage('team')">👥 Team</a>
                 <a onclick="showPage('impressum')">📄 Impressum</a>
             </div>
         </div>
-        <div class="ip-badge" onclick="copyIP()">IP KOPIEREN</div>
+        <div class="ip-badge" onclick="copyIP()">core.endstone.top</div>
     </div>
 </nav>
 
 <section id="home" class="page active">
     <img src="logo.png" style="width:160px; border-radius:50%; margin-bottom:20px; box-shadow: 0 0 40px var(--accent-glow);">
     <h1>MC <span>CORE</span></h1>
-    <p style="max-width:550px; text-align:center; color:var(--subtext); font-size: 1rem; line-height: 1.6; margin-bottom: 20px;">
+    <p style="max-width:550px; text-align:center; color:var(--subtext); font-size: 1rem; line-height: 1.6; margin-bottom: 20px; padding: 0 15px;">
         Reines PvP-Projekt. Hardcore. Nur 1 Leben. Minecraft Core war sehr anspruchsvoll, aber umso mehr freuen wir uns darauf.
     </p>
-    <a href="https://discord.gg/My4NBJ7y" target="_blank" class="btn-discord">Discord Server</a>
+    <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+        <a href="https://discord.gg/My4NBJ7y" target="_blank" class="btn-discord">Discord Server</a>
+        <div class="mobile-ip-btn" onclick="copyIP()">IP KOPIEREN</div>
+    </div>
 </section>
 
 <section id="news" class="page">
     <div class="content-card">
-        <h2>Server Updates</h2>
-        <div id="news-list">Lade Updates...</div>
+        <h2>Updates</h2>
+        <div id="news-list">Lade News...</div>
     </div>
 </section>
 
 <section id="rules" class="page">
     <div class="content-card">
-        <h2>Projekt-Regeln</h2>
+        <h2>Regeln</h2>
         <div class="grid">
             <div class="info-card"><h3>👥 Teams</h3><p>2er Teams. Keine Wechsel erlaubt.</p></div>
             <div class="info-card"><h3>⚔️ PvP-Pflicht</h3><p>Angreifen ist Pflicht. Kein Weglaufen.</p></div>
-            <div class="info-card"><h3>💀 Tod = Ende</h3><p>Nur 1 Leben. Tod ist endgültig.</p></div>
-            <div class="info-card"><h3>🚫 No-Gos</h3><p>Kein Cart-PvP, kein Bow-Camping.</p></div>
-        </div>
-    </div>
-</section>
-
-<section id="gear" class="page">
-    <div class="content-card">
-        <h2>Gear & Items</h2>
-        <div class="grid">
-            <div class="info-card"><h3>❌ Verboten</h3><p>Totems, OP-Äpfel, Mace, Tridents.</p></div>
-            <div class="info-card"><h3>⛔ Nether</h3><p>Deaktiviert. Kein Netherite.</p></div>
-        </div>
-    </div>
-</section>
-
-<section id="times" class="page">
-    <div class="content-card">
-        <h2>Spielzeiten</h2>
-        <div class="grid">
-            <div class="info-card"><h3>📅 Mo - Fr</h3><p>20:00 - 21:00 Uhr</p></div>
-            <div class="info-card"><h3>Weekend</h3><p>15:00 - 19:00 Uhr</p></div>
         </div>
     </div>
 </section>
@@ -223,16 +197,12 @@
 <section id="impressum" class="page">
     <div class="content-card">
         <h2>Impressum</h2>
-        <p style="color:var(--subtext);">
-            MC CORE Netzwerk<br>Vertreten durch: DevCoder<br><br>
-            Mail: <a href="mailto:mc.core.netzwerk@gmail.com" style="color:var(--accent); text-decoration:none;">mc.core.netzwerk@gmail.com</a>
-        </p>
+        <p>MC CORE Netzwerk<br>Mail: <a href="mailto:mc.core.netzwerk@gmail.com" style="color:var(--accent)">mc.core.netzwerk@gmail.com</a></p>
     </div>
 </section>
 
 <footer>
-    Made by <b>DevCoder</b> &bull; &copy; 2026 MC CORE Project<br>
-    <a onclick="showPage('impressum')" style="cursor:pointer; text-decoration:underline;">Impressum</a>
+    Made by <b>DevCoder</b> &bull; &copy; 2026 MC CORE Project
 </footer>
 
 <script>
@@ -258,23 +228,21 @@
     async function loadNews() {
         try {
             const res = await fetch('updates.json');
-            if (!res.ok) throw new Error();
             let data = await res.json();
             const container = document.getElementById('news-list');
             container.innerHTML = '';
             data.forEach(u => {
                 const entry = document.createElement('div');
-                entry.className = 'news-entry';
-                entry.innerHTML = `<span style="font-size:0.75rem; color:var(--accent)">${u.datum}</span><div style="font-weight:900; margin:5px 0;">${u.titel}</div><p style="color:var(--subtext); font-size:0.9rem;">${u.text}</p><hr style="border:0; border-top:1px solid var(--glass-border); margin:15px 0;">`;
+                entry.style.marginBottom = "20px";
+                entry.innerHTML = `<span style="font-size:0.75rem; color:var(--accent)">${u.datum}</span><div style="font-weight:900; margin:5px 0;">${u.titel}</div><p style="color:var(--subtext); font-size:0.9rem;">${u.text}</p>`;
                 container.appendChild(entry);
             });
-        } catch (e) { document.getElementById('news-list').innerHTML = "Keine News aktuell verfügbar."; }
+        } catch (e) { document.getElementById('news-list').innerHTML = "Keine News verfügbar."; }
     }
 
     async function loadTeam() {
         try {
             const res = await fetch('team.json');
-            if (!res.ok) throw new Error();
             const data = await res.json();
             const container = document.getElementById('team-container');
             for (const [role, members] of Object.entries(data)) {
