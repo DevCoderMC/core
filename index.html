@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MC CORE | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <title>MC-CORE | Dashboard</title>
     <link rel="icon" type="image/png" href="logo.png?v=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #000000;
@@ -16,6 +16,7 @@
             --accent-glow: rgba(255, 140, 0, 0.25);
             --text: #ffffff;
             --subtext: #b0b0b0;
+            --danger: #ff4444;
             --nav-bg: rgba(8, 8, 8, 0.9);
             --card-inner: rgba(255, 255, 255, 0.04);
         }
@@ -66,7 +67,7 @@
             background: var(--nav-bg); backdrop-filter: var(--glass-blur);
             min-width: 180px; border-radius: 18px; border: 1px solid var(--glass-border);
             padding: 8px; transform: translateY(10px); 
-            transition: visibility 0s 0.3s, opacity 0.3s ease, transform 0.3s ease;
+            transition: visibility 0s 0.4s, opacity 0.4s ease, transform 0.4s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
@@ -100,20 +101,23 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; width: 100%; }
         .info-card { background: var(--card-inner); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; }
+        .info-card h3 { color: var(--accent); margin-bottom: 8px; font-size: 1rem; }
         
+        .danger-box { border: 1px solid var(--danger); background: rgba(255, 68, 68, 0.05); }
+        .danger-box h3 { color: var(--danger); }
+
         footer { padding: 40px 20px; color: var(--subtext); font-size: 0.8rem; text-align: center; width: 100%; }
 
-        /* --- MOBILE SPECIALS --- */
         .mobile-ip-btn { display: none; margin-top: 15px; background: var(--text); color: var(--bg); padding: 14px 28px; border-radius: 16px; font-weight: 900; cursor: pointer; text-align: center; width: 100%; max-width: 280px; }
 
         @media (max-width: 768px) {
-            .nav-controls .ip-badge { display: none; } /* Oben aus Nav entfernen */
-            .mobile-ip-btn { display: block; } /* Unter Discord anzeigen */
+            .nav-controls .ip-badge { display: none; }
+            .mobile-ip-btn { display: block; }
             h1 { font-size: 2.5rem; }
             .page { padding-top: 100px; }
+            .content-card { padding: 20px; }
         }
 
-        /* --- OVERLAY --- */
         #copy-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
@@ -128,6 +132,8 @@
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
         .btn-discord { text-decoration: none; background: #5865F2; color: white; padding: 16px 32px; border-radius: 18px; font-weight: 800; transition: 0.3s; display: inline-block; text-align: center; width: 100%; max-width: 280px; }
+        ul { list-style: none; padding: 0; color: var(--subtext); font-size: 0.95rem; line-height: 1.6; }
+        li::before { content: "• "; color: var(--accent); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -141,7 +147,7 @@
 <nav>
     <div class="brand" onclick="showPage('home')">
         <img src="logo.png" class="nav-logo" alt="Logo">
-        <span style="font-weight:900; letter-spacing: -0.5px;">MC CORE</span>
+        <span style="font-weight:900; letter-spacing: -0.5px;">MC-CORE</span>
     </div>
     <div class="nav-controls">
         <button class="mode-toggle" onclick="toggleMode()">🌓</button>
@@ -151,6 +157,9 @@
                 <a onclick="showPage('home')">🏠 Start</a>
                 <a onclick="showPage('news')">📰 News</a>
                 <a onclick="showPage('rules')">⚖️ Regeln</a>
+                <a onclick="showPage('beweise')">📽️ Beweise</a>
+                <a onclick="showPage('gear')">⚔️ Gear</a>
+                <a onclick="showPage('times')">⏰ Zeiten</a>
                 <a onclick="showPage('team')">👥 Team</a>
                 <a onclick="showPage('impressum')">📄 Impressum</a>
             </div>
@@ -163,7 +172,7 @@
     <img src="logo.png" style="width:160px; border-radius:50%; margin-bottom:20px; box-shadow: 0 0 40px var(--accent-glow);">
     <h1>MC <span>CORE</span></h1>
     <p style="max-width:550px; text-align:center; color:var(--subtext); font-size: 1rem; line-height: 1.6; margin-bottom: 20px; padding: 0 15px;">
-        Reines PvP-Projekt. Hardcore. Nur 1 Leben. Minecraft Core war sehr anspruchsvoll, aber umso mehr freuen wir uns darauf.
+        Reines PvP-Projekt. Hardcore. Core war sehr anspruchsvoll, aber umso mehr freuen wir uns darauf.
     </p>
     <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
         <a href="https://discord.gg/My4NBJ7y" target="_blank" class="btn-discord">Discord Server</a>
@@ -174,16 +183,58 @@
 <section id="news" class="page">
     <div class="content-card">
         <h2>Updates</h2>
-        <div id="news-list">Lade News...</div>
+        <div id="news-list">Lade Protokoll...</div>
     </div>
 </section>
 
 <section id="rules" class="page">
     <div class="content-card">
-        <h2>Regeln</h2>
+        <h2>Projekt-Regeln</h2>
         <div class="grid">
-            <div class="info-card"><h3>👥 Teams</h3><p>2er Teams. Keine Wechsel erlaubt.</p></div>
-            <div class="info-card"><h3>⚔️ PvP-Pflicht</h3><p>Angreifen ist Pflicht. Kein Weglaufen.</p></div>
+            <div class="info-card"><h3>👥 Teams</h3><p>2er Teams. Keine Wechsel erlaubt. Werden vor Start ausgelost.</p></div>
+            <div class="info-card"><h3>⚔️ PvP-Pflicht</h3><p>Angreifen ist Pflicht. Passives Spielen oder dauerhaftes Verstecken ist verboten.</p></div>
+            <div class="info-card"><h3>💀 Tod = Ende</h3><p>Nur 1 Leben. Wer stirbt, fliegt vom Server. Der Tod ist endgültig.</p></div>
+            <div class="info-card"><h3>🚫 No-Gos</h3><p>Cart-PvP, Railguns, Minecart-Traps und Bow-Camping sind streng verboten.</p></div>
+            <div class="info-card danger-box">
+                <h3>⚠️ Combat Log</h3>
+                <p>Das Ausloggen während eines Kampfes (egal ob Absicht oder Disconnect) führt zum sofortigen Ausschluss vom Projekt.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="beweise" class="page">
+    <div class="content-card">
+        <h2>Beweispflicht</h2>
+        <div class="grid">
+            <div class="info-card"><h3>📽️ Videopflicht</h3><p>Wiederbelebung bei Bugs NUR mit Video. Ohne Clip bleibt man tot.</p></div>
+            <div class="info-card"><h3>🚩 Verstöße</h3><p>Meldungen anderer Spieler werden nur mit Videobeweis bearbeitet.</p></div>
+        </div>
+        <div class="info-card" style="margin-top:20px;">
+            <h3>Tools für Aufnahmen</h3>
+            <ul><li>Medal (Einfaches Clipping)</li><li>OBS Studio</li><li>NVIDIA ShadowPlay</li></ul>
+        </div>
+    </div>
+</section>
+
+<section id="gear" class="page">
+    <div class="content-card">
+        <h2>Gear & Items</h2>
+        <div class="grid">
+            <div class="info-card"><h3>❌ Verboten</h3><p>Totems, OP-Äpfel, Mace, Tridents existieren nicht.</p></div>
+            <div class="info-card"><h3>⛔ No Nether</h3><p>Nether deaktiviert. Kein Netherite, keine Tränke.</p></div>
+            <div class="info-card"><h3>✨ Enchants</h3><p>Kein Schutz IV, Schärfe V oder Mending verfügbar.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="times" class="page">
+    <div class="content-card">
+        <h2>Spielzeiten</h2>
+        <div class="grid">
+            <div class="info-card"><h3>📅 Mo - Fr</h3><p>20:00 - 21:00 Uhr. Inaktivität führt zum Ausschluss.</p></div>
+            <div class="info-card"><h3>Weekend</h3><p>Sa & So: 15:00 - 19:00 Uhr.</p></div>
+            <div class="info-card"><h3>🏙️ Samstag</h3><p>16:00 - 18:00 PvP-Free Zone zum friedlichen Bauen.</p></div>
         </div>
     </div>
 </section>
@@ -198,12 +249,23 @@
 <section id="impressum" class="page">
     <div class="content-card">
         <h2>Impressum</h2>
-        <p>MC CORE Netzwerk<br>Mail: <a href="mailto:mc.core.netzwerk@gmail.com" style="color:var(--accent)">mc.core.netzwerk@gmail.com</a></p>
+        <div class="info-card">
+            <h3>Angaben gemäß § 5 TMG</h3>
+            <p style="color:var(--subtext); line-height: 1.8;">
+                MC CORE Netzwerk<br>
+                Vertreten durch: DevCoder<br><br>
+                <strong>Kontakt:</strong><br>
+                E-Mail: <a href="mailto:mc.core.netzwerk@gmail.com" style="color:var(--accent); text-decoration:none;">mc.core.netzwerk@gmail.com</a><br><br>
+                <strong>Haftungsausschluss:</strong><br>
+                Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
+            </p>
+        </div>
     </div>
 </section>
 
 <footer>
-    Made by <b>DevCoder</b> &bull; &copy; 2026 MC CORE Project
+    Made by <b>DevCoder</b> &bull; &copy; 2026 MC CORE Project<br>
+    <a onclick="showPage('impressum')" style="cursor:pointer; text-decoration:underline;">Impressum & Kontakt</a>
 </footer>
 
 <script>
@@ -238,7 +300,7 @@
                 entry.innerHTML = `<span style="font-size:0.75rem; color:var(--accent)">${u.datum}</span><div style="font-weight:900; margin:5px 0;">${u.titel}</div><p style="color:var(--subtext); font-size:0.9rem;">${u.text}</p>`;
                 container.appendChild(entry);
             });
-        } catch (e) { document.getElementById('news-list').innerHTML = "Keine News verfügbar."; }
+        } catch (e) { document.getElementById('news-list').innerHTML = "Aktuell keine Neuigkeiten."; }
     }
 
     async function loadTeam() {
