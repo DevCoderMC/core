@@ -1,11 +1,5 @@
 [
   {
-    "datum": "07.04.2026",
-    "titel": "Web Update",
-    "kategorie": "ADD",
-    "text": "Hey! Hier ist DevCoder und dies ist die offizielle Core Webapp. Discord: https://discord.gg/KaDsskAe"
-  },
-  {
     "datum": "11.04.2026",
     "titel": "Release",
     "kategorie": "UPDATE",
@@ -16,5 +10,11 @@
     "titel": "Discord URL",
     "kategorie": "CHANGE",
     "text": "Neuer Discord Join-Link: dsc.gg/minecraft-core"
+  },
+  {
+    "datum": "07.04.2026",
+    "titel": "Web Update",
+    "kategorie": "ADD",
+    "text": "Hey! Hier ist DevCoder und dies ist die offizielle Core Webapp. Discord: https://discord.gg/KaDsskAe"
   }
 ]
